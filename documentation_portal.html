@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopEasy Analytics & NLP Documentation Portal</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- PrismJS theme for syntax highlighting (Tomorrow Night) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <!-- Mermaid.js for rendering diagrams -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        background: '#151D30',
+        primaryColor: '#3B82F6',
+        primaryTextColor: '#F8FAFC',
+        lineColor: '#38BDF8'
+      }
+    });
+  </script>
+  <style>
+    :root {
+      --bg-base: #0B0F19;
+      --bg-surface: #151D30;
+      --bg-sidebar: #0F1423;
+      --primary: #3B82F6;
+      --primary-hover: #2563EB;
+      --accent-purple: #8B5CF6;
+      --text-main: #E2E8F0;
+      --text-muted: #94A3B8;
+      --text-header: #F8FAFC;
+      --border: #1E293B;
+      
+      --font-sans: 'Inter', sans-serif;
+      --font-title: 'Outfit', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Sidebar Styling */
+    aside {
+      width: 320px;
+      background-color: var(--bg-sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 100;
+    }
+
+    .sidebar-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-header h1 {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-header);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar-header h1 i {
+      color: var(--primary);
+    }
+
+    .sidebar-header p {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 16px;
+    }
+
+    .nav-group {
+      margin-bottom: 24px;
+    }
+
+    .nav-title {
+      font-family: var(--font-title);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      padding-left: 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 8px;
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 4px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .nav-item i {
+      margin-right: 10px;
+      width: 16px;
+      text-align: center;
+      color: var(--text-muted);
+      transition: color 0.2s ease;
+    }
+
+    .nav-item:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      color: var(--text-header);
+    }
+
+    .nav-item:hover i {
+      color: var(--primary);
+    }
+
+    .nav-item.active {
+      background-color: rgba(59, 130, 246, 0.15);
+      color: var(--primary);
+      font-weight: 600;
+      border-left: 3px solid var(--primary);
+      border-radius: 0 8px 8px 0;
+    }
+
+    .nav-item.active i {
+      color: var(--primary);
+    }
+
+    /* Main Content Styling */
+    main {
+      margin-left: 320px;
+      flex: 1;
+      padding: 40px 60px;
+      max-width: 1200px;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Typography */
+    h2 {
+      font-family: var(--font-title);
+      font-size: 32px;
+      color: var(--text-header);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 16px;
+      margin-bottom: 30px;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .badge {
+      background-color: var(--border);
+      color: var(--text-main);
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-primary {
+      background-color: rgba(59, 130, 246, 0.2);
+      color: var(--primary);
+    }
+
+    h3 {
+      font-family: var(--font-title);
+      font-size: 22px;
+      color: var(--text-header);
+      margin-top: 40px;
+      margin-bottom: 16px;
+      border-left: 4px solid var(--primary);
+      padding-left: 12px;
+    }
+
+    h4 {
+      font-family: var(--font-title);
+      font-size: 16px;
+      color: var(--text-header);
+      margin-top: 24px;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    p {
+      line-height: 1.625;
+      margin-bottom: 16px;
+      color: var(--text-main);
+    }
+
+    ul, ol {
+      margin-bottom: 20px;
+      padding-left: 24px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    /* Alert Blocks (Matching requested IDE style) */
+    .alert {
+      padding: 16px;
+      border-radius: 10px;
+      margin-bottom: 24px;
+      display: flex;
+      gap: 14px;
+      border-left-width: 4px;
+      border-left-style: solid;
+    }
+
+    .alert i {
+      font-size: 18px;
+      margin-top: 3px;
+    }
+
+    .alert-content {
+      flex: 1;
+    }
+
+    .alert-content strong {
+      display: block;
+      margin-bottom: 4px;
+      font-family: var(--font-title);
+      font-size: 15px;
+    }
+
+    .alert-note {
+      background-color: rgba(59, 130, 246, 0.08);
+      border-left-color: var(--primary);
+      color: var(--text-main);
+    }
+    .alert-note i, .alert-note strong { color: var(--primary); }
+
+    .alert-important {
+      background-color: rgba(245, 158, 11, 0.08);
+      border-left-color: #F59E0B;
+    }
+    .alert-important i, .alert-important strong { color: #F59E0B; }
+
+    .alert-warning {
+      background-color: rgba(239, 68, 68, 0.08);
+      border-left-color: #EF4444;
+    }
+    .alert-warning i, .alert-warning strong { color: #EF4444; }
+
+    .alert-tip {
+      background-color: rgba(16, 185, 129, 0.08);
+      border-left-color: #10B981;
+    }
+    .alert-tip i, .alert-tip strong { color: #10B981; }
+
+    /* Tables (Premium layout) */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 14px;
+      background-color: var(--bg-surface);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    th {
+      background-color: rgba(255, 255, 255, 0.02);
+      font-family: var(--font-title);
+      font-weight: 600;
+      color: var(--text-header);
+      text-align: left;
+      padding: 14px 18px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    td {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-main);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background-color: rgba(255, 255, 255, 0.01);
+    }
+
+    /* Code Blocks */
+    pre[class*="language-"] {
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #0D121F !important;
+      margin-bottom: 24px;
+      font-family: var(--font-mono);
+      position: relative;
+    }
+
+    code[class*="language-"] {
+      font-family: var(--font-mono);
+      font-size: 13.5px;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 5px 10px;
+      font-size: 11px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: var(--font-sans);
+    }
+
+    .copy-btn:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* Mermaid Wrapper */
+    .diagram-container {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+    }
+
+    /* Separator */
+    hr {
+      border: 0;
+      height: 1px;
+      background: var(--border);
+      margin: 40px 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      aside {
+        width: 100%;
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+      body {
+        flex-direction: column;
+      }
+      main {
+        margin-left: 0;
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar Navigation -->
+  <aside>
+    <div class="sidebar-header">
+      <h1><i class="fa-solid fa-chart-line"></i> ShopEasy Suite</h1>
+      <p>Data & NLP Documentation Portal</p>
+    </div>
+    
+    <div class="sidebar-nav">
+      <div class="nav-group">
+        <div class="nav-title">Guides</div>
+        <div class="nav-item active" onclick="switchTab('sql-guide')">
+          <i class="fa-solid fa-database"></i> SQL Processing Pipeline
+        </div>
+        <div class="nav-item" onclick="switchTab('nlp-guide')">
+          <i class="fa-solid fa-brain"></i> Sentiment Analysis (NLP)
+        </div>
+      </div>
+      
+      <div class="nav-group">
+        <div class="nav-title">Source Files</div>
+        <a class="nav-item" href="file:///e:/Gamma/Data Analytics project/Shopeasy-consumer-intelligence-funnel-and-sentiment-analysis-/01.Data_Validation.sql" target="_blank">
+          <i class="fa-solid fa-file-code"></i> 01.Data_Validation.sql
+        </a>
+        <a class="nav-item" href="file:///e:/Gamma/Data Analytics project/Shopeasy-consumer-intelligence-funnel-and-sentiment-analysis-/02_cleaning_transformation.sql" target="_blank">
+          <i class="fa-solid fa-file-code"></i> 02_cleaning.sql
+        </a>
+        <a class="nav-item" href="file:///e:/Gamma/Data Analytics project/Shopeasy-consumer-intelligence-funnel-and-sentiment-analysis-/03_Sentiment_analysis.ipynb" target="_blank">
+          <i class="fa-brands fa-python"></i> 03_Sentiment_analysis.ipynb
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main>
+    
+    <!-- SQL Pipeline Tab -->
+    <div id="sql-guide" class="tab-content active">
+      <h2>SQL Data Validation & Transformation</h2>
+      <div class="subtitle">
+        <span><i class="fa-solid fa-calendar-days"></i> Analysis Period: 2023–2025</span>
+        <span class="badge badge-primary">SQL Server</span>
+        <span class="badge">ETL Pipeline</span>
+      </div>
+
+      <p>This document details the SQL processing pipeline designed to audit and normalize database layers for the ShopEasy conversion funnel project. Operations are separated into **Data Validation** (Read-Only auditing) and **Data Cleaning & Transformation** (Materializing clean tables).</p>
+
+      <h3>🗺️ Data Pipeline Architecture</h3>
+      <div class="diagram-container">
+        <pre class="mermaid" style="background:transparent; border:none; margin:0;">
+graph TD
+    %% Source Tables
+    subgraph "Raw Datasets"
+        CJ[customer_journey]
+        CR[customer_reviews]
+        ED[engagement_data]
+    end
+
+    %% Validation Phase
+    subgraph "01_validation.sql (Audit)"
+        V_Null[NULL Checks]
+        V_Dup[Logical Duplicate Detection]
+        V_Col[Case Collation Checks]
+    end
+
+    CJ & CR & ED --> V_Null & V_Dup & V_Col
+
+    %% Cleaning Phase
+    subgraph "02_cleaning_transformation.sql (ETL)"
+        T_Dup[ROW_NUMBER Filter]
+        T_Case[Standardize Casing]
+        T_Split[LEFT/RIGHT/CHARINDEX Split]
+        T_Trim[TRIM & REPLACE Whitespace]
+    end
+
+    CJ --> T_Dup
+    CJ --> T_Case
+    ED --> T_Split
+    ED --> T_Case
+    CR --> T_Trim
+
+    %% Destination
+    subgraph "Cleaned Physical Tables"
+        CJ_C[(customer_journey_cleaned)]
+        CR_C[(customer_reviews_cleaned)]
+        ED_C[(engagement_data_cleaned)]
+    end
+
+    T_Dup & T_Case --> CJ_C
+    T_Trim --> CR_C
+    T_Split --> ED_C
+        </pre>
+      </div>
+
+      <hr>
+
+      <h2>1. Data Validation Phase (01.Data_Validation.sql)</h2>
+      <p>Audit checks performed over dimensions and fact tables to inspect data quality before downstream ingestion.</p>
+
+      <h3>A. Customer Journey Table (customer_journey)</h3>
+      
+      <h4>1. Null Check Query</h4>
+      <p>Checks columns for NULL entries using a single-pass sum aggregation.</p>
+      <pre><code class="language-sql">SELECT 
+    COUNT(*) AS total_rows,
+    SUM(CASE WHEN CustomerID IS NULL THEN 1 ELSE 0 END) AS null_customer_id,
+    SUM(CASE WHEN ProductID IS NULL THEN 1 ELSE 0 END) AS null_product_id,
+    SUM(CASE WHEN VisitDate IS NULL THEN 1 ELSE 0 END) AS null_visit_date,
+    SUM(CASE WHEN Stage IS NULL THEN 1 ELSE 0 END) AS null_stage,
+    SUM(CASE WHEN Action IS NULL THEN 1 ELSE 0 END) AS null_action,
+    SUM(CASE WHEN Duration IS NULL THEN 1 ELSE 0 END) AS null_duration
+FROM dbo.customer_journey;</code></pre>
+      <div class="alert alert-note">
+        <i class="fa-solid fa-circle-info"></i>
+        <div class="alert-content">
+          <strong>Duration NULL Verification</strong>
+          613 NULLs were identified in the Duration column. Further grouping queries confirmed all NULL durations occur exclusively during page "Click" drop-offs, indicating this is expected transactional behavior.
+        </div>
+      </div>
+
+      <h4>2. Logical Duplicate Check</h4>
+      <p>Detects repeated customer-product interactions at identical points in time.</p>
+      <pre><code class="language-sql">WITH duplicates AS (
+    SELECT 
+        JourneyID, CustomerID, ProductID, VisitDate, Stage, Action, Duration,
+        ROW_NUMBER() OVER (
+            PARTITION BY CustomerID, ProductID, VisitDate, Stage, Action 
+            ORDER BY JourneyID 
+        ) AS rnk 
+    FROM customer_journey
+)
+SELECT * FROM duplicates 
+WHERE rnk > 1;</code></pre>
+
+      <h4>3. Case-Sensitive Collation Auditing</h4>
+      <p>Exposes casing variations hidden by default Case-Insensitive configurations in SQL Server.</p>
+      <pre><code class="language-sql">SELECT DISTINCT Stage COLLATE Latin1_General_CS_AS FROM dbo.customer_journey;
+SELECT DISTINCT Action COLLATE Latin1_General_CS_AS FROM dbo.customer_journey;</code></pre>
+
+      <hr>
+
+      <h2>2. Data Cleaning & Transformation Phase</h2>
+      <p>Resolves issues identified in validation by outputting clean tables.</p>
+
+      <h3>A. Deduplication & Materialization</h3>
+      <p>Selects unique customer actions (filtering `rnk = 1`) and creates the cleaned table.</p>
+      <pre><code class="language-sql">WITH duplicates AS (
+    SELECT 
+        JourneyID, CustomerID, ProductID, VisitDate, Stage, Action, Duration,
+        ROW_NUMBER() OVER (
+            PARTITION BY CustomerID, ProductID, VisitDate, Stage, Action 
+            ORDER BY JourneyID 
+        ) AS rnk 
+    FROM customer_journey
+)
+SELECT JourneyID, CustomerID, ProductID, VisitDate, Stage, Action, Duration
+INTO dbo.customer_journey_cleaned
+FROM duplicates
+WHERE rnk = 1;</code></pre>
+
+      <h3>B. Column Splitting & Standardizing (engagement_data)</h3>
+      <p>Splits views and clicks from `ViewsClicksCombined` and standardizes text strings.</p>
+      <pre><code class="language-sql">SELECT 
+    EngagementID,
+    ContentID,
+    CASE 
+        WHEN UPPER(ContentType) = 'BLOG' THEN 'Blog'
+        WHEN UPPER(ContentType) = 'SOCIALMEDIA' THEN 'Socialmedia'
+        WHEN UPPER(ContentType) = 'VIDEO' THEN 'Video'
+        WHEN UPPER(ContentType) = 'NEWSLETTER' THEN 'Newsletter'
+        ELSE ContentType
+    END AS ContentType,
+    Likes,
+    CONVERT(date, EngagementDate) AS EngagementDate,
+    CampaignID,
+    ProductID,
+    CONVERT(int, LEFT(ViewsClicksCombined, CHARINDEX('-', ViewsClicksCombined) - 1)) AS Views,
+    CONVERT(int, RIGHT(ViewsClicksCombined, LEN(ViewsClicksCombined) - CHARINDEX('-', ViewsClicksCombined))) AS Clicks
+INTO dbo.engagement_data_cleaned
+FROM [dbo].[engagement_data];</code></pre>
+      
+      <div class="alert alert-tip">
+        <i class="fa-solid fa-lightbulb"></i>
+        <div class="alert-content">
+          <strong>String Manipulation Mechanics</strong>
+          <code>CHARINDEX</code> finds the hyphen separator index. <code>LEFT</code> grabs characters before the index to extract views. <code>RIGHT</code> calculates the remaining length to fetch clicks. Both values are cast to <code>INT</code> to allow calculation of Click-Through Rates (CTR).
+        </div>
+      </div>
+    </div>
+
+    <!-- NLP Sentiment Tab -->
+    <div id="nlp-guide" class="tab-content">
+      <h2>Customer Sentiment Analysis (NLP)</h2>
+      <div class="subtitle">
+        <span><i class="fa-brands fa-python"></i> Python Pipeline</span>
+        <span class="badge badge-primary">VADER Model</span>
+        <span class="badge">Theme Extraction</span>
+      </div>
+
+      <p>This document explains the NLP methodology used to score customer review text and map key feedback themes for product health scorecards.</p>
+
+      <h3>🗺️ Sentiment Extraction Architecture</h3>
+      <div class="diagram-container">
+        <pre class="mermaid" style="background:transparent; border:none; margin:0;">
+graph LR
+    A[Clean SQL Reviews] --> B[VADER Scoring]
+    B --> C{Zero Score Check}
+    C -->|Yes: Lexicon Gap| D[Hybrid Rescue: Use Star Rating]
+    C -->|No: Score Assigned| E[Categorize & Bucket]
+    D --> E
+    E --> F[Export Sentiment CSV]
+    F -->|Filter: Negative Category| G[Theme Frequency Analysis]
+    G --> H[Keyword Mapping]
+    H --> I[Export Issues CSV]
+        </pre>
+      </div>
+
+      <hr>
+
+      <h2>1. Sentiment Scoring & Lexicon Rescuing</h2>
+      <p>Processes text reviews using the VADER lexicon package, integrated with Star Rating logic to circumvent lexical shortcomings.</p>
+
+      <h3>A. Python Sentiment Scoring Run</h3>
+      <pre><code class="language-python">from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+
+analyzer = SentimentIntensityAnalyzer()
+df_reviews['SentimentScore'] = df_reviews['ReviewText'].apply(
+    lambda x: analyzer.polarity_scores(x)['compound']
+)</code></pre>
+
+      <h3>B. The Hybrid Sentiment Model</h3>
+      <p>Corrects e-commerce phrases (like <i>"The quality is top-notch"</i>) which VADER ranks as neutral (`0.0`), by utilizing the customer’s rating as a fallback validator.</p>
+      <pre><code class="language-python">def categorize_sentiment(score, rating):
+    if score > 0.05: 
+        if rating >= 4:
+            return 'Positive'  
+        elif rating == 3:
+            return 'Mixed Positive'  
+        else:
+            return 'Mixed Negative'  
+    elif score < -0.05: 
+        if rating <= 2:
+            return 'Negative'  
+        elif rating == 3:
+            return 'Mixed Negative' 
+        else:
+            return 'Mixed Positive'  
+    else:  # VADER Compound Score = 0.0 (Neutral)
+        if rating >= 4:
+            return 'Positive'  # Rescue positive gap
+        elif rating <= 2:
+            return 'Negative'  # Rescue negative gap
+        else:
+            return 'Neutral'</code></pre>
+
+      <div class="alert alert-important">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <div class="alert-content">
+          <strong>Mixed Negative Categorization</strong>
+          Identifies customers who leave a rating of 3 but include negative text context. Standard rating aggregates miss this group, making them high churn risks.
+        </div>
+      </div>
+
+      <hr>
+
+      <h2>2. Negative Theme Extraction & Key Frequency</h2>
+      <p>Filters negative review texts and extracts specific complaint themes.</p>
+
+      <h3>A. Tokenization & Stop-word Filtering</h3>
+      <pre><code class="language-python">from collections import Counter
+import re
+
+df_negative = df_reviews[df_reviews['SentimentCategory'] == 'Negative']
+negative_text = ' '.join(df_negative['ReviewText'].str.lower())
+words = re.findall(r'\b\w+\b', negative_text)
+
+stop_words = ['the', 'a', 'is', 'it', 'was', 'and', 'for', 'to', 'of', 'my', 'i', 'not', 'very', 'this']
+filtered = {w: c for w, c in Counter(words).items() if w not in stop_words}
+print(Counter(filtered).most_common(5))</code></pre>
+
+      <h3>B. Pain Point Categorization Results</h3>
+      <p>Heuristic matching of keywords dynamically groups complaints into business departments.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Issue Category</th>
+            <th>Review Count</th>
+            <th>Trigger Words</th>
+            <th>Action Plan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Unmet Expectations</strong></td>
+            <td>70</td>
+            <td>meet, expectations, average, nothing, special</td>
+            <td>Rewrite product descriptions & audit images.</td>
+          </tr>
+          <tr>
+            <td><strong>Product Cost</strong></td>
+            <td>47</td>
+            <td>worth, money, expensive, price, costly</td>
+            <td>Review value messaging and pricing structures.</td>
+          </tr>
+          <tr>
+            <td><strong>Product Performance</strong></td>
+            <td>40</td>
+            <td>performance, disappointed, bad, terrible</td>
+            <td>Flag to Quality Control division.</td>
+          </tr>
+          <tr>
+            <td><strong>Delivery</strong></td>
+            <td>38</td>
+            <td>arrived, late, delivery, shipping</td>
+            <td>Assess shipping vendor SLA.</td>
+          </tr>
+          <tr>
+            <td><strong>Durability</strong></td>
+            <td>18</td>
+            <td>stopped, working, broke, month</td>
+            <td>Evaluate manufacturing raw materials.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="alert alert-tip">
+        <i class="fa-solid fa-lightbulb"></i>
+        <div class="alert-content">
+          <strong>Future NLP Scaling</strong>
+          Keyword checking does not handle sarcasm or negations. For larger text sizes, transitioning to <b>TF-IDF</b> or embedding models (e.g., <b>BERTopic</b>) is recommended.
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  
+  <script>
+    // Tab switching routing
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+      });
+
+      document.getElementById(tabId).classList.add('active');
+      
+      // Highlight current tab in nav
+      const targetNavItem = Array.from(document.querySelectorAll('.nav-item')).find(item => {
+        return item.getAttribute('onclick') && item.getAttribute('onclick').includes(tabId);
+      });
+      if (targetNavItem) {
+        targetNavItem.classList.add('active');
+      }
+    }
+
+    // Add copy button logic
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll("pre").forEach(block => {
+        // Skip mermaid wrappers
+        if (block.querySelector(".mermaid")) return;
+        
+        const btn = document.createElement("button");
+        btn.className = "copy-btn";
+        btn.innerText = "Copy";
+        block.appendChild(btn);
+        
+        btn.addEventListener("click", () => {
+          const code = block.querySelector("code").innerText;
+          navigator.clipboard.writeText(code).then(() => {
+            btn.innerText = "Copied!";
+            setTimeout(() => { btn.innerText = "Copy"; }, 2000);
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

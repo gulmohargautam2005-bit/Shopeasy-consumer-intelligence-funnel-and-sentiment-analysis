@@ -208,11 +208,11 @@ The SQL files used to validate and clean this data can be found here: [01_valida
 
 This project was developed as part of a portfolio demonstrating end-to-end data analysis capabilities across SQL, Python, and Power BI.
 
-**Data Analyst:** Praveen M
+**Data Analyst:** Gaurav Gautam
 
-**LinkedIn:** [Profile](https://www.linkedin.com/in/praveen-m-a6b0a1354)
+**LinkedIn:** [Profile](https://www.linkedin.com/in/gaurav-gautam-61046841a)
 
-**Email:** praveenm2124@gmail.com
+**Email:** gulmohargautam2005@gmail.com
 
 ---
 

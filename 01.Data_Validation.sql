@@ -41,7 +41,7 @@ SELECT
 	SUM(CASE WHEN VisitDate IS NULL THEN 1 ELSE 0 END) AS null_visite_date ,
     SUM(CASE WHEN stage IS NULL THEN 1 ELSE 0 END) AS null_stage,
     SUM(CASE WHEN action IS NULL THEN 1 ELSE 0 END) AS null_action,
-	SUM(CASE WHEN Duration IS NULL THEN 1 ELSE 0 END) AS null_duration -- 613 nulls 
+	SUM(CASE WHEN Duration IS NULL THEN 1 ELSE 0 END) AS null_duration -- 613 nulls --598
 FROM dbo.customer_journey;
 
 
